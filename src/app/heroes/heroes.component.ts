@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Hero } from '../hero';
-import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -9,17 +9,23 @@ import { HEROES } from '../mock-heroes';
   styleUrls: ['./heroes.component.css']
 })
 export class HeroesComponent implements OnInit {
-  // heores 変数に HEROES 配列を代入している
-  heroes = HEROES;
+  heroes: Hero[];
   selectedHero: Hero;  // 変数定義 Hero 型
 
-  constructor() { }
+  constructor(
+    private heroService: HeroService
+  ) { }
 
   ngOnInit() {
+    this.getHeroes();
   }
 
   // メソッド作成　引数は hero 変数。型は Hero 型 app/hero.ts で定義
   onSelect(hero: Hero): void {
     this.selectedHero = hero;   // 定義した selectedHero 変数に、onSelect イベントで取得した値を代入
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes);
   }
 }
